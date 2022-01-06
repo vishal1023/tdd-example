@@ -1,5 +1,6 @@
 package com.example.tdd.service;
 
+import com.example.tdd.exception.CarNotFoundException;
 import com.example.tdd.model.Car;
 import com.example.tdd.repository.CarRepository;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,12 @@ public class CarService {
     }
 
     public Car getCarDetails(String name) {
-        return carRepository.findByName(name);
+        Car car = carRepository.findByName(name);
+
+        if(car == null) {
+            throw new CarNotFoundException();
+        }
+
+        return car;
     }
 }
