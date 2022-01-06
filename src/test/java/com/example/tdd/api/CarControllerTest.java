@@ -1,5 +1,6 @@
 package com.example.tdd.api;
 
+import com.example.tdd.exception.CarNotFoundException;
 import com.example.tdd.model.Car;
 import com.example.tdd.service.CarService;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,12 +38,21 @@ public class CarControllerTest {
 
     @Test
     void getCar_shouldReturnCarDetails() throws Exception {
-        when(carService.getCarDetails(anyString())).thenReturn(new Car("bmw", "hybrid"));
+        given(carService.getCarDetails(anyString())).willReturn(new Car("bmw", "hybrid"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/cars/bmw"))
                 .andDo(print()) //This is helpful to check what is the response
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("name").value("bmw"))
                 .andExpect(jsonPath("type").value("hybrid"));
+    }
+
+    @Test
+    void getCar_shouldReturn_NOT_FOUND_404() throws Exception {
+        given(carService.getCarDetails(anyString())).willThrow(new CarNotFoundException());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/cars/bmw"))
+                .andDo(print()) //This is helpful to check what is the response
+                .andExpect(status().isNotFound());
     }
 }
