@@ -20,7 +20,4 @@ public class CarController {
         return carService.getCarDetails(name);
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    private void carNotFoundHandler(CarNotFoundException e) {}
 }
