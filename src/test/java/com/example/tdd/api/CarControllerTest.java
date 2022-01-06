@@ -12,7 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,9 +36,10 @@ public class CarControllerTest {
 
     @Test
     void getCar_shouldReturnCarDetails() throws Exception {
-        given(carService.getCarDetails(anyString())).willReturn(new Car("bmw", "hybrid"));
+        when(carService.getCarDetails(anyString())).thenReturn(new Car("bmw", "hybrid"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/cars/bmw"))
+                .andDo(print()) //This is helpful to check what is the response
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("name").value("bmw"))
                 .andExpect(jsonPath("type").value("hybrid"));

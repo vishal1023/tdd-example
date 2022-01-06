@@ -2,8 +2,8 @@ package com.example.tdd.model;
 
 public class Car {
 
-    private final String name;
-    private final String type;
+    private String name;
+    private String type;
 
     public Car(String name, String type) {
         this.name = name;
@@ -11,10 +11,10 @@ public class Car {
     }
 
     public String getName() {
-        return null;
+        return name;
     }
 
     public String getType() {
-        return null;
+        return type;
     }
 }
